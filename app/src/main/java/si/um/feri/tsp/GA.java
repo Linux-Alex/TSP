@@ -1,6 +1,7 @@
 package si.um.feri.tsp;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import si.um.feri.tsp.Utility.RandomUtils;
 import si.um.feri.tsp.problems.TSP;
@@ -80,10 +81,22 @@ public class GA {
 
     private void swapMutation(TSP.Tour off) {
         //izvedi mutacijo
+        // Določite indeksa mest, ki jih bosta zamenjala.
+        int index1 = new Random().nextInt(off.getPath().length);
+        int index2 = new Random().nextInt(off.getPath().length);
+        while (index1 == index2) {
+            index2 = new Random().nextInt(off.getPath().length);
+        }
+
+        // Zamenjajte mesta.
+        TSP.City temp = off.getPath()[index1];
+        off.setCity(index1, off.getPath()[index2]);
+        off.setCity(index2, temp);
     }
 
     private TSP.Tour[] pmx(TSP.Tour parent1, TSP.Tour parent2) {
         //izvedi pmx križanje, da ustvariš dva potomca
+
         return null;
     }
 
