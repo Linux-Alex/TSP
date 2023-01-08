@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Objects;
 
 import si.um.feri.tsp.R;
+import si.um.feri.tsp.Utility.RandomUtils;
 
 public class TSP {
 
@@ -117,7 +118,22 @@ public class TSP {
 
     public Tour generateTour() {
         //TODO generate random tour, use Utility.RandomUtils
-        return null;
+        Tour tmp = new Tour(numberOfCities);
+
+        List<Integer> indexes = new ArrayList<Integer>();
+        for(int i = 0; i < numberOfCities; i++)
+            indexes.add(i);
+
+        for(int i = 0; indexes.size() > 0; i++) {
+            int randomIndex = RandomUtils.nextInt(0, indexes.size());
+            tmp.setCity(i, cities.get(indexes.get(randomIndex)));
+
+            indexes.remove(randomIndex);
+        }
+
+        for(City c: tmp.getPath())
+            Log.d("TSP status", "index: " + c.index);
+        return tmp;
     }
 
     private void loadData(InputStream inputStream) {    // in use
@@ -200,18 +216,18 @@ public class TSP {
             }
 
         }
-        /*if(NCS){
-            for(City c: cities) {
-                Log.d("TSP status", c.index + " " + c.x + " " + c.y);
-            }
-        } else if(EWS) {
-            for(int i = 0; i < numberOfCities; i++) {
-                for(int j = 0; j < numberOfCities; j++) {
-                    System.out.print(weights[i][j] + " ");
-                }
-                System.out.print( "\n");
-            }
-        }*/
+//        if(NCS){
+//            for(City c: cities) {
+//                Log.d("TSP status", c.index + " " + c.x + " " + c.y);
+//            }
+//        } else if(EWS) {
+//            for(int i = 0; i < numberOfCities; i++) {
+//                for(int j = 0; j < numberOfCities; j++) {
+//                    System.out.print(weights[i][j] + " ");
+//                }
+//                System.out.print( "\n");
+//            }
+//        }
         start = cities.get(0);
 
     }

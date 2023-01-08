@@ -30,6 +30,12 @@ public class GA {
             problem.evaluate(newTour);
             population.add(newTour);
             //TODO shrani najboljšega (best)
+
+            if(best == null)
+                best = newTour.clone();
+            else if(best.getDistance() > newTour.getDistance()) {
+                best = newTour.clone();
+            }
         }
 
         while (problem.getNumberOfEvaluations() < problem.getMaxEvaluations()) {
@@ -39,6 +45,9 @@ public class GA {
                 TSP.Tour parent1 = tournamentSelection();
                 TSP.Tour parent2 = tournamentSelection();
                 //TODO preveri, da starša nista enaka
+
+                if(parent1 == parent2)
+                    continue;
 
                 if (RandomUtils.nextDouble() < cr) {
                     TSP.Tour[] children = pmx(parent1, parent2);
@@ -60,6 +69,11 @@ public class GA {
 
             //TODO ovrednoti populacijo in shrani najboljšega (best)
             //implementacijo lahko naredimo bolj učinkovito tako, da overdnotimo samo tiste, ki so se spremenili (mutirani in križani potomci)
+            for(TSP.Tour t: population) {
+                if(t.getDistance() < best.getDistance()) {
+                    best = t.clone();
+                }
+            }
 
             population = new ArrayList<>(offspring);
             offspring.clear();

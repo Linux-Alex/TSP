@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
             InputStream inputStream = getResources().openRawResource(R.raw.bays29);
             TSP eilTsp = new TSP(inputStream, 10000);
             GA ga = new GA(100, 0.8, 0.1);
-            //TSP.Tour bestPath = ga.execute(eilTsp);
+            TSP.Tour bestPath = ga.execute(eilTsp);
 
             // shrani min, avg in std
         }
