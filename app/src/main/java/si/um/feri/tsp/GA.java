@@ -1,6 +1,7 @@
 package si.um.feri.tsp;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import si.um.feri.tsp.Utility.RandomUtils;
@@ -82,10 +83,10 @@ public class GA {
     private void swapMutation(TSP.Tour off) {
         //izvedi mutacijo
         // Določite indeksa mest, ki jih bosta zamenjala.
-        int index1 = new Random().nextInt(off.getPath().length);
-        int index2 = new Random().nextInt(off.getPath().length);
+        int index1 = RandomUtils.nextInt(off.getPath().length);
+        int index2 = RandomUtils.nextInt(off.getPath().length);
         while (index1 == index2) {
-            index2 = new Random().nextInt(off.getPath().length);
+            index2 = RandomUtils.nextInt(off.getPath().length);
         }
 
         // Zamenjajte mesta.
@@ -96,13 +97,47 @@ public class GA {
 
     private TSP.Tour[] pmx(TSP.Tour parent1, TSP.Tour parent2) {
         //izvedi pmx križanje, da ustvariš dva potomca
+        TSP.Tour tours[] = new TSP.Tour[2];
+
+        tours[0] = parent1.clone();
+        tours[1] = parent2.clone();
+
+        int length = Math.min(tours[0].getPath().length, tours[1].getPath().length);
+
+        int cut1 = RandomUtils.nextInt(0, length-1);
+        int cut2;
+        do {
+            cut2 = RandomUtils.nextInt(cut1+1, length);
+        } while(cut1 >= cut2);
+
+        for(int i = cut1; i < cut2; i++) {
+            TSP.City tmp = tours[0].getPath()[i];
+            tours[0].setCity(i, tours[1].getPath()[i]);
+            tours[1].setCity(i, tours[0].getPath()[i]);
+        }
+
+        List<Integer> sameIndexes = new ArrayList<>();
+
 
         return null;
     }
 
     private TSP.Tour tournamentSelection() {
         // naključno izberi dva RAZLIČNA posameznika in vrni boljšega
-        return null;
+
+        int rand1 = RandomUtils.nextInt(0, population.size());
+        int rand2;
+        do {
+            rand2 = RandomUtils.nextInt(0, population.size());
+        } while(rand1 == rand2);
+
+        TSP.Tour t1 = population.get(rand1);
+        TSP.Tour t2 = population.get(rand2);
+
+        if(t1.getDistance() > t2.getDistance())
+            return t2;
+        else
+            return t1;
     }
 }
 
