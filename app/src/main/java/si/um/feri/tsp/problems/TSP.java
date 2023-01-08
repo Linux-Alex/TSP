@@ -3,10 +3,14 @@ package si.um.feri.tsp.problems;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import si.um.feri.tsp.R;
@@ -128,6 +132,7 @@ public class TSP {
         //TODO set starting city, which is always at index 0
 
         InputStream inputStream = TSP.class.getClassLoader().getResourceAsStream(path);
+
         if(inputStream == null) {
             System.err.println("File "+path+" not found!");
             Log.d("TSP status", "ERROR: File " + path + " not found!");
@@ -179,8 +184,27 @@ public class TSP {
             e.printStackTrace();
         }
         System.out.println(lines);
-        for(String line : lines)
-            Log.d("TSP status", line);
+
+        for(String line : lines) {
+            if(line.matches("^[0-9]+ [0-9]+ [0-9]+$")) {
+                List<String> data = Arrays.asList(line.split(" "));
+                City tmp = new City();
+                tmp.index = Integer.parseInt(data.get(0));
+                tmp.x = Integer.parseInt(data.get(1));
+                tmp.y = Integer.parseInt(data.get(2));
+                cities.add(tmp);
+                Log.d("TSP status", "Found city:  " + line);
+            }
+            else {
+                Log.d("TSP status", "Normal text: " + line);
+            }
+        }
+
+        for(City c: cities) {
+            Log.d("TSP status", c.index + " " + c.x + " " + c.y);
+        }
+
+        start = cities.get(0);
         //TODO parse data
     }
 

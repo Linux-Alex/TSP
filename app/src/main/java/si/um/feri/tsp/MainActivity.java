@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         RandomUtils.setSeedFromTime(); // nastavi novo seme ob vsakem zagonu main metode (vsak zagon bo drugačen)
 
         InputStream inputStream = getResources().openRawResource(R.raw.eil101);
+        // InputStream inputStream2 = context.getResources().openRawResource(R.raw.eil101);
 
         // primer zagona za problem eil101.tsp
         for (int i = 0; i < 100; i++) {
