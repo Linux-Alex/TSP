@@ -82,7 +82,7 @@ public class TSP {
         this.context = context;
     }
 
-    public TSP(String path, int maxEvaluations, InputStream inputStream) {
+    public TSP(InputStream inputStream, int maxEvaluations) {
         loadData(inputStream);
         numberOfEvaluations = 0;
         this.maxEvaluations = maxEvaluations;
@@ -124,12 +124,10 @@ public class TSP {
         return null;
     }
 
-    private void loadData(String path) {    // not in use
+    private void loadData(String path) {    // not in use, doesn't work in Android
         //TODO set starting city, which is always at index 0
 
-//        InputStream inputStream = TSP.class.getClassLoader().getResourceAsStream(path);
-//        InputStream inputStream = context.getResources().openRawResource(R.raw.bays29);
-        InputStream inputStream = context.getResources().openRawResource(R.raw.eil101);
+        InputStream inputStream = TSP.class.getClassLoader().getResourceAsStream(path);
         if(inputStream == null) {
             System.err.println("File "+path+" not found!");
             Log.d("TSP status", "ERROR: File " + path + " not found!");
@@ -158,8 +156,6 @@ public class TSP {
     private void loadData(InputStream inputStream) {    // in use
         //TODO set starting city, which is always at index 0
 
-//        InputStream inputStream = TSP.class.getClassLoader().getResourceAsStream(path);
-//        InputStream inputStream = context.getResources().openRawResource(R.raw.bays29);
         String path = "got from inputstream";
         if(inputStream == null) {
             System.err.println("File "+path+" not found!");
@@ -183,6 +179,8 @@ public class TSP {
             e.printStackTrace();
         }
         System.out.println(lines);
+        for(String line : lines)
+            Log.d("TSP status", line);
         //TODO parse data
     }
 
