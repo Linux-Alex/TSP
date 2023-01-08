@@ -99,12 +99,17 @@ public class TSP {
     }
 
     private double calculateDistance(City from, City to) {
-        //TODO implement
         switch (distanceType) {
             case EUCLIDEAN:
-                return 0;
+                // Izračun razdalje z uporabo evklidske razdalje.
+                double xDiff = from.x - to.x;
+                double yDiff = from.y - to.y;
+                return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
             case WEIGHTED:
-                return 0;
+                // Izračun razdalje z uporabo matrike tež.
+                int index1 = cities.indexOf(from);
+                int index2 = cities.indexOf(to);
+                return weights[index1][index2];
             default:
                 return Double.MAX_VALUE;
         }
