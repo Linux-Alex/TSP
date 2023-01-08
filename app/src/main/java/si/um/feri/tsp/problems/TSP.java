@@ -79,22 +79,8 @@ public class TSP {
     DistanceType distanceType = DistanceType.EUCLIDEAN;
     int numberOfEvaluations, maxEvaluations;
 
-
-    public TSP(String path, int maxEvaluations, Context context) {
-        loadData(path);
-        numberOfEvaluations = 0;
-        this.maxEvaluations = maxEvaluations;
-        this.context = context;
-    }
-
     public TSP(InputStream inputStream, int maxEvaluations) {
         loadData(inputStream);
-        numberOfEvaluations = 0;
-        this.maxEvaluations = maxEvaluations;
-    }
-
-    public TSP(String path, int maxEvaluations) {
-        loadData(path);
         numberOfEvaluations = 0;
         this.maxEvaluations = maxEvaluations;
     }
@@ -127,36 +113,6 @@ public class TSP {
     public Tour generateTour() {
         //TODO generate random tour, use Utility.RandomUtils
         return null;
-    }
-
-    private void loadData(String path) {    // not in use, doesn't work in Android
-        //TODO set starting city, which is always at index 0
-
-        InputStream inputStream = TSP.class.getClassLoader().getResourceAsStream(path);
-
-        if(inputStream == null) {
-            System.err.println("File "+path+" not found!");
-            Log.d("TSP status", "ERROR: File " + path + " not found!");
-            return;
-        }
-        else {
-            Log.d("TSP status", "Found file: " + path);
-        }
-
-        List<String> lines = new ArrayList<>();
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
-
-            String line = br.readLine();
-            while (line != null) {
-                lines.add(line);
-                line = br.readLine();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println(lines);
-        //TODO parse data
     }
 
     private void loadData(InputStream inputStream) {    // in use
