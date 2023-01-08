@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import si.um.feri.tsp.R;
 
@@ -159,7 +160,6 @@ public class TSP {
     }
 
     private void loadData(InputStream inputStream) {    // in use
-        //TODO set starting city, which is always at index 0
 
         String path = "got from inputstream";
         if(inputStream == null) {
@@ -185,27 +185,74 @@ public class TSP {
         }
         System.out.println(lines);
 
+        boolean NCS = false;
+        boolean EWS = false;
+        int EWScounter = 0;
+
         for(String line : lines) {
-            if(line.matches("^[0-9]+ [0-9]+ [0-9]+$")) {
-                List<String> data = Arrays.asList(line.split(" "));
-                City tmp = new City();
-                tmp.index = Integer.parseInt(data.get(0));
-                tmp.x = Integer.parseInt(data.get(1));
-                tmp.y = Integer.parseInt(data.get(2));
-                cities.add(tmp);
-                Log.d("TSP status", "Found city:  " + line);
+             if (line.startsWith("NAME")) {
+                name = line.split(":")[1].trim();
+            } else if (line.startsWith("DIMENSION")) {
+                numberOfCities = Integer.parseInt(line.split(":")[1].trim());
+            } else if (line.startsWith("EDGE_WEIGHT_TYPE")) {
+                if (line.split(":")[1].trim().equals("EUC_2D"))
+                    distanceType = DistanceType.EUCLIDEAN;
+                else if (line.split(":")[1].trim().equals("EXPLICIT"))
+                    distanceType = DistanceType.WEIGHTED;
+            } else if (line.startsWith("NODE_COORD_SECTION")) {
+                NCS = true;
+                continue;
+            } else if (line.startsWith("EDGE_WEIGHT_SECTION")) {
+                weights = new double[numberOfCities][numberOfCities];
+                EWS = true;
+                continue;
+            } else  if (line.startsWith("DISPLAY_DATA_SECTION") ){
+                NCS = true; //ker je logika ista..
+                continue;
+            } else if (line.startsWith("EOF")) {
+                break;
             }
-            else {
-                Log.d("TSP status", "Normal text: " + line);
+
+            if (NCS) {
+                List<String> split = Arrays.asList(line.split(" "));
+                List<String> split2 = new ArrayList<>();
+                for (int i = 0; i < split.size(); i++) {
+                    if (!Objects.equals(split.get(i), ""))
+                        split2.add(split.get(i));
+                }
+                City city = new City();
+                city.index = Integer.parseInt(split2.get(0));
+                city.x = Double.parseDouble(split2.get(1));
+                city.y = Double.parseDouble(split2.get(2));
+                cities.add(city);
+
+            } else if (EWS) {
+                List<String> split = Arrays.asList(line.split(" "));
+                int j = 0;
+                for (int i = 0; i < split.size(); i++) {
+                    if (Objects.equals(split.get(i), ""))
+                        continue;
+                    weights[EWScounter][j] = Double.parseDouble(split.get(i));
+                    j++;
+                }
+                EWScounter++;
             }
-        }
 
-        for(City c: cities) {
-            Log.d("TSP status", c.index + " " + c.x + " " + c.y);
         }
-
+        /*if(NCS){
+            for(City c: cities) {
+                Log.d("TSP status", c.index + " " + c.x + " " + c.y);
+            }
+        } else if(EWS) {
+            for(int i = 0; i < numberOfCities; i++) {
+                for(int j = 0; j < numberOfCities; j++) {
+                    System.out.print(weights[i][j] + " ");
+                }
+                System.out.print( "\n");
+            }
+        }*/
         start = cities.get(0);
-        //TODO parse data
+
     }
 
     public int getMaxEvaluations() {

@@ -20,14 +20,12 @@ public class MainActivity extends AppCompatActivity {
 
         RandomUtils.setSeedFromTime(); // nastavi novo seme ob vsakem zagonu main metode (vsak zagon bo drugačen)
 
-        InputStream inputStream = getResources().openRawResource(R.raw.eil101);
-        // InputStream inputStream2 = context.getResources().openRawResource(R.raw.eil101);
-
         // primer zagona za problem eil101.tsp
         for (int i = 0; i < 100; i++) {
+            InputStream inputStream = getResources().openRawResource(R.raw.bays29);
             TSP eilTsp = new TSP(inputStream, 10000);
             GA ga = new GA(100, 0.8, 0.1);
-            TSP.Tour bestPath = ga.execute(eilTsp);
+            //TSP.Tour bestPath = ga.execute(eilTsp);
 
             // shrani min, avg in std
         }
