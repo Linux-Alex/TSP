@@ -117,7 +117,6 @@ public class TSP {
     }
 
     public Tour generateTour() {
-        //TODO generate random tour, use Utility.RandomUtils
         Tour tmp = new Tour(numberOfCities);
 
         List<Integer> indexes = new ArrayList<Integer>();
@@ -131,8 +130,8 @@ public class TSP {
             indexes.remove(randomIndex);
         }
 
-        for(City c: tmp.getPath())
-            Log.d("TSP status", "index: " + c.index);
+//        for(City c: tmp.getPath())
+//            Log.d("TSP status", "index: " + c.index);
         return tmp;
     }
 

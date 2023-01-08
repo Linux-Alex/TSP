@@ -29,7 +29,6 @@ public class GA {
             TSP.Tour newTour = problem.generateTour();
             problem.evaluate(newTour);
             population.add(newTour);
-            //TODO shrani najboljšega (best)
 
             if(best == null)
                 best = newTour.clone();
@@ -44,7 +43,6 @@ public class GA {
             while (offspring.size() < popSize) {
                 TSP.Tour parent1 = tournamentSelection();
                 TSP.Tour parent2 = tournamentSelection();
-                //TODO preveri, da starša nista enaka
 
                 if(parent1 == parent2)
                     continue;
@@ -67,7 +65,6 @@ public class GA {
                 }
             }
 
-            //TODO ovrednoti populacijo in shrani najboljšega (best)
             //implementacijo lahko naredimo bolj učinkovito tako, da overdnotimo samo tiste, ki so se spremenili (mutirani in križani potomci)
             for(TSP.Tour t: population) {
                 if(t.getDistance() < best.getDistance()) {
