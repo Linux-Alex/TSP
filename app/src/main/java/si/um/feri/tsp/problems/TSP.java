@@ -1,12 +1,19 @@
 package si.um.feri.tsp.problems;
 
+import android.content.Context;
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import si.um.feri.tsp.R;
+
 public class TSP {
+
+    private Context context;
 
     enum DistanceType {EUCLIDEAN, WEIGHTED}
 
@@ -68,6 +75,19 @@ public class TSP {
     int numberOfEvaluations, maxEvaluations;
 
 
+    public TSP(String path, int maxEvaluations, Context context) {
+        loadData(path);
+        numberOfEvaluations = 0;
+        this.maxEvaluations = maxEvaluations;
+        this.context = context;
+    }
+
+    public TSP(String path, int maxEvaluations, InputStream inputStream) {
+        loadData(inputStream);
+        numberOfEvaluations = 0;
+        this.maxEvaluations = maxEvaluations;
+    }
+
     public TSP(String path, int maxEvaluations) {
         loadData(path);
         numberOfEvaluations = 0;
@@ -104,13 +124,50 @@ public class TSP {
         return null;
     }
 
-    private void loadData(String path) {
+    private void loadData(String path) {    // not in use
         //TODO set starting city, which is always at index 0
 
-        InputStream inputStream = TSP.class.getClassLoader().getResourceAsStream(path);
+//        InputStream inputStream = TSP.class.getClassLoader().getResourceAsStream(path);
+//        InputStream inputStream = context.getResources().openRawResource(R.raw.bays29);
+        InputStream inputStream = context.getResources().openRawResource(R.raw.eil101);
         if(inputStream == null) {
             System.err.println("File "+path+" not found!");
+            Log.d("TSP status", "ERROR: File " + path + " not found!");
             return;
+        }
+        else {
+            Log.d("TSP status", "Found file: " + path);
+        }
+
+        List<String> lines = new ArrayList<>();
+        try(BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+
+            String line = br.readLine();
+            while (line != null) {
+                lines.add(line);
+                line = br.readLine();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(lines);
+        //TODO parse data
+    }
+
+    private void loadData(InputStream inputStream) {    // in use
+        //TODO set starting city, which is always at index 0
+
+//        InputStream inputStream = TSP.class.getClassLoader().getResourceAsStream(path);
+//        InputStream inputStream = context.getResources().openRawResource(R.raw.bays29);
+        String path = "got from inputstream";
+        if(inputStream == null) {
+            System.err.println("File "+path+" not found!");
+            Log.d("TSP status", "ERROR: File " + path + " not found!");
+            return;
+        }
+        else {
+            Log.d("TSP status", "Found file: " + path);
         }
 
         List<String> lines = new ArrayList<>();
