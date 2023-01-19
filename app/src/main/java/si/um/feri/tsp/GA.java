@@ -96,30 +96,66 @@ public class GA {
     }
 
     private TSP.Tour[] pmx(TSP.Tour parent1, TSP.Tour parent2) {
-        //izvedi pmx križanje, da ustvariš dva potomca
-        TSP.Tour tours[] = new TSP.Tour[2];
+        TSP.Tour copyParent1 = parent1.clone();
+        TSP.Tour copyParent2 = parent2.clone();
 
-        tours[0] = parent1.clone();
-        tours[1] = parent2.clone();
+        int cutPoint1 = RandomUtils.nextInt(copyParent1.getPath().length -1);
+        int cutPoint2 = RandomUtils.nextInt(copyParent1.getPath().length -1);
 
-        int length = Math.min(tours[0].getPath().length, tours[1].getPath().length);
+        while(cutPoint1 == cutPoint2)
+            cutPoint2 = RandomUtils.nextInt(copyParent1.getPath().length -1);
 
-        int cut1 = RandomUtils.nextInt(0, length-1);
-        int cut2;
-        do {
-            cut2 = RandomUtils.nextInt(cut1+1, length);
-        } while(cut1 >= cut2);
-
-        for(int i = cut1; i < cut2; i++) {
-            TSP.City tmp = tours[0].getPath()[i];
-            tours[0].setCity(i, tours[1].getPath()[i]);
-            tours[1].setCity(i, tours[0].getPath()[i]);
+        if(cutPoint1 > cutPoint2) {
+            int tmp = cutPoint1;
+            cutPoint1 = cutPoint2;
+            cutPoint2 = tmp;
         }
 
-        List<Integer> sameIndexes = new ArrayList<>();
+        // create segments
+        for(int i = cutPoint1; i <= cutPoint2; i++) {   // znotraj segmenta
+            for(int k = 0; k < copyParent1.getPath().length; k++) { // zunaj segmenta
+                if(k >= cutPoint1 && k <= cutPoint2) continue;
 
+                // if found duplicate
+                if(copyParent2.getPath()[i] == copyParent2.getPath()[k]) {
+                    // swap
+                    TSP.City tmp = copyParent1.getPath()[i];
+                    copyParent1.setCity(i, copyParent2.getPath()[i]);
+                    copyParent2.setCity(i, tmp);
+                }
+            }
+        }
 
-        return null;
+        for(int i = cutPoint1; i <= cutPoint2; i++) {   // znotraj segmenta
+            boolean doSwap = false;
+            int swapIndex;
+            do {
+                swapIndex = i;
+
+                for(int k = 0; k < copyParent1.getPath().length; k++) { // zunaj segmenta
+                    if(k >= cutPoint1 && k <= cutPoint2) continue;
+
+                    if(copyParent2.getPath()[k] == copyParent2.getPath()[i]) {
+                        doSwap = true;
+
+                        for(int j = cutPoint1; j <= cutPoint2; j++) {
+                            if(copyParent1.getPath()[swapIndex] == copyParent2.getPath()[j]) {
+                                swapIndex = j;
+                                break;
+                            }
+                        }
+                    }
+                }
+            } while(swapIndex != i);
+
+            if(doSwap) {
+                TSP.City tmp = copyParent2.getPath()[i];
+                copyParent2.setCity(i, copyParent1.getPath()[swapIndex]);
+                copyParent1.setCity(swapIndex, tmp);
+            }
+        }
+
+        return new TSP.Tour[] { copyParent1, copyParent2 };
     }
 
     private TSP.Tour tournamentSelection() {
