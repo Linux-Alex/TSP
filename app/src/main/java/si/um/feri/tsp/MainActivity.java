@@ -8,6 +8,7 @@ import android.util.Log;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import si.um.feri.tsp.Utility.RandomUtils;
@@ -22,22 +23,31 @@ public class MainActivity extends AppCompatActivity {
 
         RandomUtils.setSeedFromTime(); // nastavi novo seme ob vsakem zagonu main metode (vsak zagon bo drugačen)
 
-        ArrayList<TSP.Tour> list = new ArrayList<>();;
+        ArrayList<Double> list = new ArrayList<>();
+        double sum = 0;
 
         // primer zagona za problem eil101.tsp
         for (int i = 0; i < 100; i++) {
             InputStream inputStream = getResources().openRawResource(R.raw.bays29);
-            TSP eilTsp = new TSP(inputStream, 10000);
+            TSP eilTsp = new TSP(inputStream, 1000);
             GA ga = new GA(100, 0.8, 0.1);
             TSP.Tour bestPath = ga.execute(eilTsp);
             // shrani min, avg in std
-            list.add(bestPath);
+            list.add(bestPath.getDistance());
+            sum += bestPath.getDistance();
         }
 
-
-
-        //Log.d("TSP status", "min: " + list)
+        Log.d("TSP status", "min: " + Collections.min(list) + " avg: " + (sum/100) + " std: " + standardDaviation((sum/100), list));
         System.out.println(RandomUtils.getSeed()); // izpiše seme s katerim lahko ponovimo zagon
         Log.d("TSP status", "Seed: " + RandomUtils.getSeed());
+    }
+
+    double standardDaviation(double avg, ArrayList<Double> list) {
+        int std = 0;
+
+        for(double d: list)
+            std += Math.pow((d - avg), 2);
+
+        return Math.sqrt(std / list.size());
     }
 }

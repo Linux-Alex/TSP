@@ -1,5 +1,7 @@
 package si.um.feri.tsp;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -27,6 +29,8 @@ public class GA {
         offspring = new ArrayList<>();
         TSP.Tour best = null;
 
+        Log.d("TSP status", "Started execute");
+
         for (int i = 0; i < popSize; i++) {
             TSP.Tour newTour = problem.generateTour();
             problem.evaluate(newTour);
@@ -39,7 +43,11 @@ public class GA {
             }
         }
 
+        Log.d("TSP status", "Finished first for loop");
+
+
         while (problem.getNumberOfEvaluations() < problem.getMaxEvaluations()) {
+            Log.d("TSP status", "Evaluation: " + problem.getNumberOfEvaluations());
 
             //elitizem - poišči najboljšega in ga dodaj v offspring in obvezno uporabi clone()
             while (offspring.size() < popSize) {
@@ -69,6 +77,7 @@ public class GA {
 
             //implementacijo lahko naredimo bolj učinkovito tako, da overdnotimo samo tiste, ki so se spremenili (mutirani in križani potomci)
             for(TSP.Tour t: population) {
+                problem.evaluate(t);
                 if(t.getDistance() < best.getDistance()) {
                     best = t.clone();
                 }
