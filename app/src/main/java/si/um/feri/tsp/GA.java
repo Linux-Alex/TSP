@@ -49,6 +49,7 @@ public class GA {
         while (problem.getNumberOfEvaluations() < problem.getMaxEvaluations()) {
             Log.d("TSP status", "Evaluation: " + problem.getNumberOfEvaluations());
 
+            Log.d("GA", "Evaluations: " + problem.getNumberOfEvaluations());
             //elitizem - poišči najboljšega in ga dodaj v offspring in obvezno uporabi clone()
             while (offspring.size() < popSize) {
                 TSP.Tour parent1 = tournamentSelection();
